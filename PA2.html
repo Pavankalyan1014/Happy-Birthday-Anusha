@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For My Heart ❤️</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+* {
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  background: radial-gradient(circle at top, #1a2a6c, #0f0c29, #000);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  overflow: hidden;
+}
+
+/* PASSWORD */
+#lock {
+  text-align: center;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(12px);
+  padding: 40px;
+  border-radius: 22px;
+  box-shadow: 0 0 40px rgba(255,105,180,0.4);
+  z-index: 10;
+}
+
+input {
+  margin-top: 15px;
+  padding: 12px;
+  border-radius: 25px;
+  border: none;
+  width: 220px;
+  text-align: center;
+}
+
+button {
+  margin-top: 15px;
+  padding: 10px 28px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(45deg,#ff416c,#ff4b2b);
+  color: white;
+  font-size: 1em;
+}
+
+#error {
+  margin-top: 10px;
+  color: #ff8080;
+  display: none;
+}
+
+/* CONTENT */
+#content {
+  display: none;
+  text-align: center;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(12px);
+  padding: 40px;
+  border-radius: 24px;
+  max-width: 460px;
+  box-shadow: 0 0 40px rgba(255,105,180,0.4);
+  z-index: 10;
+}
+
+h1 {
+  color: #ffb6c1;
+  animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 10px #ff69b4; }
+  to { text-shadow: 0 0 30px #ff1493; }
+}
+
+/* SLIDESHOW */
+.slideshow {
+  margin: 20px auto;
+  width: 100%;
+  max-width: 320px;
+  height: 220px;
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 0 25px rgba(255,105,180,0.5);
+}
+
+.slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+/* TYPEWRITER */
+#letter {
+  margin-top: 20px;
+  line-height: 1.7;
+  min-height: 200px;
+  white-space: pre-line;
+}
+
+/* HEARTS */
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<!-- PASSWORD -->
+<div id="lock">
+  <h2>🔐 Private Surprise</h2>
+  <p>Dear Chinnu ❤️</p>
+  <input type="password" id="pass" placeholder="Password">
+  <br>
+  <button onclick="check()">Unlock 💖</button>
+  <div id="error">Wrong password 😔</div>
+</div>
+
+<!-- CONTENT -->
+<div id="content">
+  <h1>🎉 Dear Chinnu ❤️</h1>
+
+  <!-- PHOTO SLIDESHOW -->
+  <div class="slideshow">
+    <img src="pic1.jpg" class="slide active">
+      </div>
+
+  <div id="letter"></div>
+</div>
+
+<script>
+/* PASSWORD */
+const PASSWORD = "14021999";
+
+function check() {
+  if (document.getElementById("pass").value === PASSWORD) {
+    document.getElementById("lock").style.display = "none";
+    document.getElementById("content").style.display = "block";
+    startTyping();
+    startFireworks();
+  } else {
+    document.getElementById("error").style.display = "block";
+  }
+}
+
+/* TYPEWRITER */
+const text = `
+From the moment you came into my life,
+everything felt lighter and happier 🌸
+
+Your smile brings calm to my heart,
+and your happiness truly matters to me ❤️
+
+I may not be perfect,
+but I’ll always care, support you,
+and stand by you in every little way 💖
+
+On your birthday and every day after,
+I wish you smiles, peace, and warmth —
+today, tomorrow, and always 🌼
+
+Happy Birthday ❤️
+`;
+
+let i = 0;
+function startTyping() {
+  if (i < text.length) {
+    document.getElementById("letter").innerHTML += text.charAt(i++);
+    setTimeout(startTyping, 45);
+  }
+}
+
+/* SLIDESHOW */
+let slides = document.querySelectorAll(".slide");
+let index = 0;
+setInterval(() => {
+  slides[index].classList.remove("active");
+  index = (index + 1) % slides.length;
+  slides[index].classList.add("active");
+}, 3000);
+
+/* HEART FIREWORKS */
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+let hearts = [];
+
+function createHeart() {
+  hearts.push({
+    x: Math.random() * canvas.width,
+    y: canvas.height,
+    alpha: 1,
+    speed: Math.random() * -2 - 1
+  });
+}
+
+function animateHearts() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  hearts.forEach((h,i)=>{
+    ctx.globalAlpha = h.alpha;
+    ctx.fillStyle = "#ff4d6d";
+    ctx.beginPath();
+    ctx.arc(h.x, h.y, 6, 0, Math.PI*2);
+    ctx.fill();
+    h.y += h.speed;
+    h.alpha -= 0.01;
+    if(h.alpha<=0) hearts.splice(i,1);
+  });
+  requestAnimationFrame(animateHearts);
+}
+
+function startFireworks() {
+  setInterval(createHeart, 300);
+  animateHearts();
+}
+</script>
+
+</body>
+</html>
